@@ -1,0 +1,5 @@
+[
+    {"interval":"1000","frame":"0ff00ff0ff0ff00ff0:f0fff0f0ff0f0fff0f:0f000ff0ff0ff000f0:ff3f70ffffff07f3ff:0f7300ffffff0037f0:fffff0f0000f0fffff:0000ff000000ff0000"},
+    {"interval":"1000","frame":"0ff00ff0ff0ff00ff0:f0fff0f0ff0f0fff0f:0f000ff0ff0ff000f0:ff3f70ffffff07f3ff:0f7300ffffff0037f0:fffff0f0000f0fffff:0000ff000000ff0000"},
+    {"interval":"150","frame":"0ff00ff0ff0ff00ff0:f0fff0f0ff0f0fff0f:0f0ffff0ff0ffff0f0:ff404ffffffff404ff:0fff04ffffff40fff0:fffff0f0000f0fffff:0000ff000000ff0000"}
+]
