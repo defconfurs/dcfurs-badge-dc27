@@ -78,23 +78,25 @@ class lis2de12:
         self.bus.mem_write(bytearray([value]), self.addr, reg)
     
     def x(self):
+        # Invert X axis to match the DC26 badge orientation.
         xraw = self.read(self.OUT_X_H)
         if (xraw > 127):
-            return (xraw - 256)
+            return (256 - xraw)
         else:
-            return xraw
+            return -xraw
     
     def y(self):
+        # Invert Y axis to match the DC26 badge orientation.
         yraw = self.read(self.OUT_Y_H)
         if (yraw > 127):
             return (256 - yraw)
         else:
-            return yraw
+            return -yraw
     
     def z(self):
         zraw = self.read(self.OUT_Z_H)
         if (zraw > 127):
-            return (256 - zraw)
+            return -(256 - zraw)
         else:
             return zraw
 
@@ -103,9 +105,10 @@ class lis2de12:
         self.filter_x[self.filter_index] = self.x()
         self.filter_y[self.filter_index] = self.y()
         self.filter_z[self.filter_index] = self.z()
-        self.filter_index = self.filter_index % 4
+        self.filter_index = (self.filter_index + 1) % 4
 
-        return (sum(self.filter_x), sum(self.filter_y), sum(self.filter_z))
+        result =  (sum(self.filter_x), sum(self.filter_y), sum(self.filter_z))
+        return result
     
     def status(self):
         if (self.irq.value()):
