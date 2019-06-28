@@ -7,11 +7,29 @@ import badge
 import random
 
 class pong:
+    color_map = [
+        0xff, # White
+        0xe0, # Red
+        0xe8, # Orange
+        0xfc, # Yellow
+        0x1c, # Green
+        0x03, # Blue
+        0x43  # Purple
+    ]
+
     def __init__(self):
         self.interval = 150
         self.updown = 1
         self.leftright = 1
         self.bouncecount = 0
+        self.history = [
+            (0,0),
+            (0,0),
+            (0,0),
+            (0,0),
+            (0,0),
+            (0,0)
+        ]
         while True:
             self.x = random.randint(0, dcfurs.ncols-1)
             self.y = random.randint(0, dcfurs.nrows-1)
@@ -39,7 +57,13 @@ class pong:
     def draw(self):
         self.bounce()
         dcfurs.clear()
-        dcfurs.set_pixel(self.x, self.y, 1)
+
+        self.history = [(self.x, self.y)] + self.history[:-1]
         self.x += self.leftright
         self.y += self.updown
-        dcfurs.set_pixel(self.x, self.y, 255)
+
+        dcfurs.set_pixel(self.x, self.y, self.color_map[0])
+        index = 1
+        for x,y in self.history:
+            dcfurs.set_pixel(x, y, self.color_map[index])
+            index += 1

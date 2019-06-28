@@ -47,7 +47,6 @@ class __jsonanim__:
 files = os.listdir("/flash/animations")
 for filename in files:
     if filename[:2] != "__" and filename[-5:] == ".json":
-        print("Preparing animation from file " + filename)
         classname = filename[:-5]
         globals()[classname] = type(classname, (__jsonanim__,), {'path': "/flash/animations/" + filename})
 
