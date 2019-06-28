@@ -46,12 +46,9 @@ left = switch(Pin('SW2', Pin.IN))
 ##-----------------------------------------------
 ## Capacative Touch Controller
 ##-----------------------------------------------
-## TODO: Implement Me!
-class capsense:
-    def event(self):
-        return False
-
-boop = capsense()
+boop = dcfurs.boop()
+tmr = Timer(2, freq=100)
+tmr.callback(lambda t: boop.start())
 
 ##-----------------------------------------------
 ## Motion Detection / Accelerometer
