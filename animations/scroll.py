@@ -64,25 +64,40 @@ font5var = {'A':bytearray([0x1E,0x05,0x05,0x1E,0x00]),
             '?':bytearray([0x01,0x15,0x02,0x00])}
 
 class scroll:
-    def __init__(self, text=None):
+    color_map = [
+        0xe0, # Red
+        0xe8, # Orange
+        0xfc, # Yellow
+        0x1c, # Green
+        0x03, # Blue
+        0x43  # Purple
+    ]
+
+    def __init__(self, text=None, color=None):
         if text:
             self.text = text
         else:
             self.text = settings.banner
+        
         self.interval = 250
         self.scrollbuf = bytearray([0x00, 0x00, 0x00, 0x00])
+        self.colorbuf = bytearray([0x00, 0x00, 0x00, 0x00])
         self.shift = 0
         
+        coloridx = 0
         for char in self.text:
             if char in font5var:
                 self.scrollbuf += font5var[char]
+                self.colorbuf += bytearray([self.color_map[coloridx]] * len(font5var[char]))
+                coloridx = (coloridx + 1) % len(self.color_map)
     
     def draw(self):
         dcfurs.clear()
         for x in range(0, dcfurs.ncols):
             colbits = self.scrollbuf[(self.shift + x) % len(self.scrollbuf)]
+            color = self.colorbuf[(self.shift + x) % len(self.colorbuf)]
             for y in range(0, dcfurs.nrows):
                 if (colbits & (1 << y)) != 0:
-                    dcfurs.set_pixel(x,y,0xff)
+                    dcfurs.set_pixel(x,y,color)
         self.shift = (self.shift + 1) % len(self.scrollbuf)
 
