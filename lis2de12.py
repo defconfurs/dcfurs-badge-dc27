@@ -64,7 +64,6 @@ class lis2de12:
         self.write(self.INT1_THS,  64)      # Configure interrupt thresholds at ~1g
         self.write(self.INT1_DURATION, 10)  # High condition must exist for 10ms to trigger.
         self.write(self.CLICK_CFG, 0x15)    # Enable single-tap detection.
-
     
     def read(self, reg):
         result = self.bus.mem_read(1, self.addr, reg)

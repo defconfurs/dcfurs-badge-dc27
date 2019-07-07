@@ -53,7 +53,28 @@ tmr.callback(lambda t: boop.start())
 ##-----------------------------------------------
 ## Motion Detection / Accelerometer
 ##-----------------------------------------------
-imu = lis2de12(bus)
+class dummy:
+    def x(self):
+        return 0
+    
+    def y(self):
+        return 0
+    
+    def z(self):
+        return 0
+    
+    def read(self, addr):
+        return 0
+    
+    def filtered_xyz(self):
+        return (0, 0, 0)
+
+# Wrap in a try/except in case we are running on
+# a prototype with a bad accelerometer.
+try:
+    imu = lis2de12(bus)
+except:
+    imu = dummy()
 
 ##-----------------------------------------------
 ## Low Power Sleep
