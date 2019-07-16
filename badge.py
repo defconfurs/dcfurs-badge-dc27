@@ -19,7 +19,7 @@ import micropython
 micropython.alloc_emergency_exception_buf(100)
 
 ## Bring up the LED matrix
-pwmclk = Timer(8, freq=125000)
+pwmclk = Timer(8, freq=500000)
 dcfurs.init(pwmclk)
 dcfurs.clear()
 
