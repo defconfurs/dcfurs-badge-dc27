@@ -9,6 +9,6 @@ FILES += LICENSE
 FILES += animations
 
 ## Generate the tarball
-TARBALL=badge-dcfurs-dc27.tar.gz
+TARBALL=dcfurs-badge-dc27.tar.gz
 $(TARBALL): $(FILES)
 	tar -czf $@ -C ${SRCDIR} ${FILES}

@@ -1,0 +1,2 @@
+# Don't checkin the tarball package.
+*.tar.gz

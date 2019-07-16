@@ -10,6 +10,7 @@ from animations.pong import pong
 from animations.maze import maze
 from animations.dgol import dgol
 from animations.dogjump import dogjump
+from animations.northernlights import northernlights
 
 ## Dynamically import all the python files we can find.
 import os

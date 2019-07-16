@@ -82,3 +82,41 @@ except:
 ## Check for low power states, or do nothing.
 def trysuspend():
     return False
+
+##-----------------------------------------------
+## Hue/Value to RGB565 conversion
+##-----------------------------------------------
+def hue2rgb(hue, val=255):
+    sextant = hue // 60
+    remainder = hue % 60
+    p = 0 # full saturation always results in zero.
+    q = (val * (60 - remainder)) // 60
+    t = (val * remainder) // 60
+    
+    if (sextant == 0):
+        r = val
+        g = t
+        b = p
+    elif (sextant == 1):
+        r = q
+        g = val
+        b = p
+    elif (sextant == 2):
+        r = p
+        g = val
+        b = t
+    elif (sextant == 3):
+        r = p
+        g = q
+        b = val
+    elif (sextant == 4):
+        r = t
+        g = p
+        b = val
+    else:
+        r = val
+        g = p
+        b = q
+   
+    return (r << 16) | (g << 8) | b 
+
