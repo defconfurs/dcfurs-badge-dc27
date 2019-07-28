@@ -16,6 +16,7 @@ from animations.northernlights import northernlights
 import os
 import sys
 import ujson
+import badge
 import dcfurs
 
 ## Template class for JSON-encoded animations
@@ -59,19 +60,32 @@ class __jsonanim__:
 
         # Handle monochrome and legacy animations
         if 'frame' in frame:
+            # Generate the animation color mapping.
+            colormap = [0]*16
+            color = badge.color()
+            c_red   = (color & 0xff0000) >> 16
+            c_green = (color & 0x00ff00) >> 8
+            c_blue  = (color & 0x0000ff) >> 0
+            for i in range(0,16):
+                p_red   = c_red * self.intensity[i] >> 8
+                p_green = c_green * self.intensity[i] >> 8
+                p_blue  = c_blue * self.intensity[i] >> 8
+                colormap[i] = (p_red << 16) + (p_green << 8) + p_blue
+            
+            # Set the pixel values.
             data = frame['frame']
             for ch in data:
                 if ch == ':':
                     x = 0
                     y = y+1
                 else:
-                    dcfurs.set_pixel(x,y,self.intensity[int(ch, 16)])
+                    dcfurs.set_pix_rgb(x, y, colormap[int(ch, 16)])
                     x = x+1
         # Handle 8-bit RGB data
-        elif 'rgb8' in frame:
+        elif 'rgb' in frame:
             pix = 0
             even = True
-            data = frame['rgb8']
+            data = frame['rgb']
             for ch in data:
                 if ch == ':':
                     x = 0

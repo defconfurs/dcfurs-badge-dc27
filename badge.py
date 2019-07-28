@@ -8,6 +8,7 @@ from pyb import ExtInt
 from pyb import I2C
 from pyb import UART
 from lis2de12 import lis2de12
+from bluetooth import bluetooth
 
 # The I2C bus used for all the off-chip stuff.
 bus = I2C(3, I2C.MASTER, baudrate=100000)
@@ -22,6 +23,29 @@ micropython.alloc_emergency_exception_buf(100)
 pwmclk = Timer(8, freq=500000)
 dcfurs.init(pwmclk)
 dcfurs.clear()
+
+##-----------------------------------------------
+## Bluetooth Module
+##-----------------------------------------------
+ble = None
+try:
+    if (bus.mem_read(8, 0x42, 0)):
+        ble = bluetooth(bus)
+except Exception as e:
+    ble = None
+
+def color():
+    if not ble:
+        return settings.color
+    
+    try:
+    	suggested = ble.color()
+    	if (suggested):
+        	return suggested
+    	else:
+        	return settings.color
+    except Exception as e:
+        return settings.color
 
 ##-----------------------------------------------
 ## Pushbutton Class

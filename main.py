@@ -19,6 +19,16 @@ if settings.bootanim:
     except Exception:
         pass
 
+## Handle events from the bluetooth module.
+def check_ble():
+    if not badge.ble:
+        return
+    
+    flags = badge.ble.read(badge.ble.REG_FLAGS)
+    if flags & badge.ble.FLAG_EMOTE:
+        emote.random()
+        pyb.delay(2500)
+
 anim = available[selected]()
 while True:
     anim.draw()
@@ -41,8 +51,6 @@ while True:
                 selected = selected - 1
                 anim = available[selected]()
         # Service events.
-        #elif badge.ble.any():
-        #    ble()
         elif badge.boop.event():
             if hasattr(anim, 'boop'):
                 anim.boop()
@@ -51,6 +59,8 @@ while True:
                     micropython.mem_info()
                 emote.boop()
                 ival = 1000
+        elif badge.ble:
+            check_ble()
 
         ## Pause for as long as long as both buttons are pressed.
         if badge.right.value() and badge.left.value():

@@ -1,5 +1,6 @@
 ## Some canned emotes that you might find interesting.
 import dcfurs
+import badge
 from random import choice
 
 ## Tall font for emotes
@@ -77,40 +78,44 @@ font7bit = {
 }
 
 def owo():
-    dcfurs.set_row(0, 0x1c00e)
-    dcfurs.set_row(1, 0x22011)
-    dcfurs.set_row(2, 0x22851)
-    dcfurs.set_row(3, 0x22b51)
-    dcfurs.set_row(4, 0x22491)
-    dcfurs.set_row(5, 0x22011)
-    dcfurs.set_row(6, 0x1c00e)
+    color = badge.color()
+    dcfurs.set_row(0, 0x1c00e, color)
+    dcfurs.set_row(1, 0x22011, color)
+    dcfurs.set_row(2, 0x22851, color)
+    dcfurs.set_row(3, 0x22b51, color)
+    dcfurs.set_row(4, 0x22491, color)
+    dcfurs.set_row(5, 0x22011, color)
+    dcfurs.set_row(6, 0x1c00e, color)
 
 def boop():
-    dcfurs.set_row(0, 0x0e48e)
-    dcfurs.set_row(1, 0x12b52)
-    dcfurs.set_row(2, 0x12b52)
-    dcfurs.set_row(3, 0x0eb4e)
-    dcfurs.set_row(4, 0x02492)
-    dcfurs.set_row(5, 0x02012)
-    dcfurs.set_row(6, 0x0200e)
+    color = badge.color()
+    dcfurs.set_row(0, 0x0e48e, color)
+    dcfurs.set_row(1, 0x12b52, color)
+    dcfurs.set_row(2, 0x12b52, color)
+    dcfurs.set_row(3, 0x0eb4e, color)
+    dcfurs.set_row(4, 0x02492, color)
+    dcfurs.set_row(5, 0x02012, color)
+    dcfurs.set_row(6, 0x0200e, color)
 
 def beep():
-    dcfurs.set_row(0, 0x0e00e)
-    dcfurs.set_row(1, 0x12492)
-    dcfurs.set_row(2, 0x12b52)
-    dcfurs.set_row(3, 0x0e6ce)
-    dcfurs.set_row(4, 0x02d92)
-    dcfurs.set_row(5, 0x02012)
-    dcfurs.set_row(6, 0x0200e)
+    color = badge.color()
+    dcfurs.set_row(0, 0x0e00e, color)
+    dcfurs.set_row(1, 0x12492, color)
+    dcfurs.set_row(2, 0x12b52, color)
+    dcfurs.set_row(3, 0x0e6ce, color)
+    dcfurs.set_row(4, 0x02d92, color)
+    dcfurs.set_row(5, 0x02012, color)
+    dcfurs.set_row(6, 0x0200e, color)
 
 def awoo():
-    dcfurs.set_row(0, 0x00006)
-    dcfurs.set_row(1, 0x11229)
-    dcfurs.set_row(2, 0x2aa29)
-    dcfurs.set_row(3, 0x2aaaf)
-    dcfurs.set_row(4, 0x11149)
-    dcfurs.set_row(5, 0x00009)
-    dcfurs.set_row(6, 0x00000)
+    color = badge.color()
+    dcfurs.set_row(0, 0x00006, color)
+    dcfurs.set_row(1, 0x11229, color)
+    dcfurs.set_row(2, 0x2aa29, color)
+    dcfurs.set_row(3, 0x2aaaf, color)
+    dcfurs.set_row(4, 0x11149, color)
+    dcfurs.set_row(5, 0x00009, color)
+    dcfurs.set_row(6, 0x00000, color)
 
 ## Render an emote from an ascii string
 def render(str):
@@ -131,11 +136,12 @@ def render(str):
     dcfurs.clear()
 
     ## Draw the left character.
+    color = badge.color()
     column = int((8 - len(lbits))/2)
     for colbits in lbits:
         for y in range(0, dcfurs.nrows):
             if (colbits & (1 << y)) != 0:
-                dcfurs.set_pixel(column, y, 0xff)
+                dcfurs.set_pix_rgb(column, y, color)
         column = column + 1
 
     ## Draw the right character.
@@ -143,7 +149,7 @@ def render(str):
     for colbits in rbits:
         for y in range(0, dcfurs.nrows):
             if (colbits & (1 << y)) != 0:
-                dcfurs.set_pixel(column,y,0xff)
+                dcfurs.set_pix_rgb(column, y, color)
         column = column + 1
 
 prebuilt = [

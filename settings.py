@@ -24,3 +24,7 @@ mazesolver = True
 # Beacons with weaker signals are subject to a cooldown which
 # will be a multiple of this time.
 blecooldown = 60000
+
+# Default color selection that animations should use unless there
+# is something more specific provided by the animation logic.
+color = 0xffffff

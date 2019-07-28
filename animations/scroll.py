@@ -73,7 +73,7 @@ class scroll:
         0x43  # Purple
     ]
 
-    def __init__(self, text=None, color=None):
+    def __init__(self, text=None):
         if text:
             self.text = text
         else:

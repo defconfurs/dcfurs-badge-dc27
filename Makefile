@@ -12,3 +12,7 @@ FILES += animations
 TARBALL=dcfurs-badge-dc27.tar.gz
 $(TARBALL): $(FILES)
 	tar -czf $@ -C ${SRCDIR} ${FILES}
+
+clean:
+	rm -f $(TARBALL)
+
