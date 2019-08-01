@@ -1,4 +1,4 @@
-## DranoTheCat's Pink and Blue Fireworks
+## DranoTheCat's Pink and Blue fireworks
 ##
 ## Tilt badge left to make lights move to the left
 ## Tilt badge right to make lights move to the right
@@ -35,7 +35,7 @@ class rainbowLight:
     self.state = 'appear'
 
 
-class rainbowBoard:
+class fireworks:
   maxRadius = 2     # Maximum radius for lights
   maxCycles = 12    # Maximum cycles lights will stay alive
   newDropPct = 90  # Percent chance each cycle for a new droplet to be created

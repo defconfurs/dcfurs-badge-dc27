@@ -15,6 +15,27 @@ class dgol:
     self.interval=75
     self.rows=18
     self.columns=7
+    self.colors = [None] * 20
+    self.colors[0] = 0
+    self.colors[1] = self.mkColor(0, 128, 128)
+    self.colors[2] = self.mkColor(0, 144, 144)
+    self.colors[3] = self.mkColor(0, 160, 160)
+    self.colors[4] = self.mkColor(0, 176, 176)
+    self.colors[5] = self.mkColor(0, 192, 192)
+    self.colors[6] = self.mkColor(0, 208, 208)
+    self.colors[7] = self.mkColor(0, 224, 224)
+    self.colors[8] = self.mkColor(0, 240, 240)
+    self.colors[9] = self.mkColor(0, 255, 255)
+    self.colors[10] = self.mkColor(0, 128, 128)
+    self.colors[11] = self.mkColor(0, 144, 144)
+    self.colors[12] = self.mkColor(0, 160, 160)
+    self.colors[13] = self.mkColor(0, 176, 176)
+    self.colors[14] = self.mkColor(0, 192, 192)
+    self.colors[15] = self.mkColor(0, 208, 208)
+    self.colors[16] = self.mkColor(0, 224, 224)
+    self.colors[17] = self.mkColor(0, 240, 240)
+    self.colors[18] = self.mkColor(0, 255, 255)
+    self.colors[19] = self.mkColor(255, 255, 255)
     self.initGrid()
 
   def checkButtons(self):
@@ -26,17 +47,33 @@ class dgol:
       self.addReverseGlider(self.rows-1, self.columns-1)
       self.last_glider_right = 18
 
+  def zfill(self, s, width):
+    if len(s) < width:
+        return ("0" * (width - len(s))) + s
+    else:
+        return s
+
+  def mkColor(self, r, g, b):
+    br = self.zfill(bin(r)[2:], 8)
+    bg = self.zfill(bin(g)[2:], 8)
+    bb = self.zfill(bin(b)[2:], 8)
+    return int(br + bg + bb, 2)
+
   def draw(self):
     self.checkButtons()
     dcfurs.clear()
     for i in range(self.rows):
       for j in range(self.columns):
         if self.grid[i][j] == 1:
-          dcfurs.set_pixel(i,j,255)
+          self.heatmap[i][j] += 1
+          if self.heatmap[i][j] > 19:
+            self.heatmap[i][j] = 19
+          dcfurs.set_pix_rgb(i, j, self.colors[self.heatmap[i][j]])
     self.update()
 
   def initGrid(self):
     self.grid = [[0 for col in range(self.columns)] for row in range(self.rows)]
+    self.heatmap = [[0 for col in range(self.columns)] for row in range(self.rows)]
     self.addGlider(1, 1)
     return self.grid
 
