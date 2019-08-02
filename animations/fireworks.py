@@ -2,11 +2,11 @@
 ##
 ## Tilt badge left to make lights move to the left
 ## Tilt badge right to make lights move to the right
-## Boop to change speed
+## Boop to change speed -- meh, this effect sucked so disabled
 ##
 
 from random import randrange
-#import math
+import math
 import dcfurs
 import badge
 import utime
@@ -46,11 +46,11 @@ class fireworks:
     self.initGrid()
     self.createLight()
 
-  def boop(self):
-    self.cval += 1
-    if self.cval >= len(self.ivals):
-      self.cval = 0
-    self.interval = self.ivals[self.cval]
+#  def boop(self):
+#    self.cval += 1
+#    if self.cval >= len(self.ivals):
+#      self.cval = 0
+#    self.interval = self.ivals[self.cval]
 
   def checkButtons(self):
     (tx, ty, tz) = badge.imu.filtered_xyz()
@@ -161,7 +161,6 @@ class fireworks:
     cr = int(light.cr * brightness + 0.5)
     cg = int(light.cg * brightness + 0.5)
     cb = int(light.cb * brightness + 0.5)
-    #print("ID: {} | ({}, {}) ;; {} ;; {}".format(light.id, light.x, light.y, radius, brightness))
     rr = radius * radius
     for x in range(light.x - radius, light.x + 1):
       ax = light.x - x
@@ -170,9 +169,8 @@ class fireworks:
         # Are we within the radius?
         ay = light.y - y
         ayay = ay * ay
-#        print("{}, {} ;; {}, {} ;; {} + {} <= {}".format(x, y, ax, ay, ax*ax, ay*ay, radius*radius))
         extra = 0
-        if radius > 2:
+        if radius > 1:
           extra = 1
         if axax + ayay <= rr + extra:
           c = self.mkColor(cr, cg, cb)
