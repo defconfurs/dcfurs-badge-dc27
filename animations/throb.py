@@ -26,7 +26,7 @@ class throb:
     self.boopLock = False
     self.moveDirection = True
     self.boopIndex = -1
-    self.boopAngles = [359, 95, 290, 190]
+    self.boopAngles = [360, 120, 300, 180]
     self.angleCycleIterations = 4
     self.boopEasterEggIndex = 0
     self.boopEasterEggMax = 25
