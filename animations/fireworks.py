@@ -4,9 +4,6 @@
 ## Tilt badge right to make lights move to the right
 ## Boop to change speed
 ##
-## TODO:
-##  * Implement Boop
-##
 
 from random import randrange
 #import math
@@ -42,10 +39,18 @@ class fireworks:
   lights = []
   def __init__(self):
     self.interval=75
+    self.ivals = [75, 150, 250, 500, 50]
+    self.cval = 0
     self.rows=18
     self.columns=7
     self.initGrid()
     self.createLight()
+
+  def boop(self):
+    self.cval += 1
+    if self.cval >= len(self.ivals):
+      self.cval = 0
+    self.interval = self.ivals[self.cval]
 
   def checkButtons(self):
     (tx, ty, tz) = badge.imu.filtered_xyz()

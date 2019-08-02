@@ -4,9 +4,6 @@
 ## Tilt badge right to 
 ## Boop to change speed
 ##
-## TODO:
-##  * Implement Boop
-##
 
 from random import randrange
 #import math
@@ -91,12 +88,20 @@ class hyperspace:
   def __init__(self):
     dcfurs.clear()
     self.interval=50
+    self.ivals = [50, 100, 200, 500, 25]
+    self.cval = 0
     self.rows=18
     self.columns=7
     self.center_x = 9
     self.center_y = 3
     self.initGrid()
     self.createStars()
+
+  def boop(self):
+    self.cval += 1
+    if self.cval >= len(self.ivals):
+      self.cval = 0
+    self.interval = self.ivals[self.cval]
 
   def dimPixels(self):
     for y in range(0, self.columns):
