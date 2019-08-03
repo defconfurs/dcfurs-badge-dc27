@@ -16,6 +16,7 @@ from animations.hyperspace import hyperspace
 from animations.dcylon import dcylon
 from animations.throb import throb 
 from animations.strobe import strobe 
+from animations.sparkle import sparkle
 
 ## Dynamically import all the python files we can find.
 import os
@@ -52,10 +53,15 @@ class __jsonanim__:
     ]
 
     def __init__(self):
-        fh = open(self.path, "r")
-        self.framenum = 0
-        self.js = ujson.load(fh)
-        fh.close()
+        try:
+            fh = open(self.path, "r")
+            self.framenum = 0
+            self.js = ujson.load(fh)
+            fh.close()
+        except MemoryError as e:
+            print("Caught a MemoryError while trying to load {}".format(self.path))
+            self.js = [{"interval":"750","frame":"0ff0000f000f000000:f00f0f0f0000f00000:f0000000f0000f0000:f0000000f000f00000:f00f0f000f0f000000:0ff00000000000ffff:000000000000000000"},{"interval":"750","frame":"0ff0000f000f000000:f00f0f0f0000f00000:f0000000f0000f0000:f0000000f000f00000:f00f0f000f0f000000:0ff000000000000000:000000000000000000"}]
+
         self.draw()
 
     def drawframe(self, frame):
