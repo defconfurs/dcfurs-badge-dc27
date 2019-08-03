@@ -15,6 +15,60 @@ class dgol:
     self.interval=75
     self.rows=18
     self.columns=7
+    self.heatcolors = [None] * 31
+    self.heatcolors[0] = 0
+    self.heatcolors[1] = self.mkColor(16, 0, 0)
+    self.heatcolors[2] = self.mkColor(32, 0, 0)
+    self.heatcolors[3] = self.mkColor(48, 0, 0)
+    self.heatcolors[4] = self.mkColor(64, 0, 0)
+    self.heatcolors[5] = self.mkColor(80, 0, 0)
+    self.heatcolors[6] = self.mkColor(96, 0, 0)
+    self.heatcolors[7] = self.mkColor(112, 0, 0)
+    self.heatcolors[8] = self.mkColor(128, 0, 0)
+    self.heatcolors[9] = self.mkColor(144, 0, 0)
+    self.heatcolors[10] = self.mkColor(160, 0, 0)
+    self.heatcolors[11] = self.mkColor(176, 0, 0)
+    self.heatcolors[12] = self.mkColor(192, 0, 0)
+    self.heatcolors[13] = self.mkColor(208, 0, 0)
+    self.heatcolors[14] = self.mkColor(224, 0, 0)
+    self.heatcolors[15] = self.mkColor(255, 0, 0)
+    self.heatcolors[16] = self.mkColor(255, 0, 16)
+    self.heatcolors[17] = self.mkColor(255, 0, 32)
+    self.heatcolors[18] = self.mkColor(255, 0, 48)
+    self.heatcolors[19] = self.mkColor(255, 0, 64)
+    self.heatcolors[20] = self.mkColor(255, 0, 80)
+    self.heatcolors[21] = self.mkColor(255, 0, 96)
+    self.heatcolors[22] = self.mkColor(255, 0, 112)
+    self.heatcolors[23] = self.mkColor(255, 0, 128)
+    self.heatcolors[24] = self.mkColor(255, 0, 144)
+    self.heatcolors[25] = self.mkColor(255, 0, 160)
+    self.heatcolors[26] = self.mkColor(255, 0, 176)
+    self.heatcolors[27] = self.mkColor(255, 0, 192)
+    self.heatcolors[28] = self.mkColor(255, 0, 208)
+    self.heatcolors[29] = self.mkColor(255, 0, 224)
+    self.heatcolors[30] = self.mkColor(255, 0, 255)
+    self.nblue = self.mkColor(0, 255, 255)
+    self.colors = [None] * 20
+    self.colors[0] = 0
+    self.colors[1] = self.mkColor(0, 128, 128)
+    self.colors[2] = self.mkColor(0, 144, 144)
+    self.colors[3] = self.mkColor(0, 160, 160)
+    self.colors[4] = self.mkColor(0, 176, 176)
+    self.colors[5] = self.mkColor(0, 192, 192)
+    self.colors[6] = self.mkColor(0, 208, 208)
+    self.colors[7] = self.mkColor(0, 224, 224)
+    self.colors[8] = self.mkColor(0, 240, 240)
+    self.colors[9] = self.mkColor(0, 255, 255)
+    self.colors[10] = self.mkColor(0, 128, 128)
+    self.colors[11] = self.mkColor(0, 144, 144)
+    self.colors[12] = self.mkColor(0, 160, 160)
+    self.colors[13] = self.mkColor(0, 176, 176)
+    self.colors[14] = self.mkColor(0, 192, 192)
+    self.colors[15] = self.mkColor(0, 208, 208)
+    self.colors[16] = self.mkColor(0, 224, 224)
+    self.colors[17] = self.mkColor(0, 240, 240)
+    self.colors[18] = self.mkColor(0, 255, 255)
+    self.colors[19] = self.mkColor(255, 255, 255)
     self.initGrid()
 
   def checkButtons(self):
@@ -26,17 +80,36 @@ class dgol:
       self.addReverseGlider(self.rows-1, self.columns-1)
       self.last_glider_right = 18
 
+  def zfill(self, s, width):
+    if len(s) < width:
+        return ("0" * (width - len(s))) + s
+    else:
+        return s
+
+  def mkColor(self, r, g, b):
+    br = self.zfill(bin(r)[2:], 8)
+    bg = self.zfill(bin(g)[2:], 8)
+    bb = self.zfill(bin(b)[2:], 8)
+    return int(br + bg + bb, 2)
+
   def draw(self):
     self.checkButtons()
-    dcfurs.clear()
+#    dcfurs.clear()
     for i in range(self.rows):
       for j in range(self.columns):
         if self.grid[i][j] == 1:
-          dcfurs.set_pixel(i,j,255)
+          self.heatmap[i][j] += 1
+          if self.heatmap[i][j] > 19:
+            self.heatmap[i][j] = 19
+          dcfurs.set_pix_rgb(i, j, self.nblue)
+        else:
+          if self.heatmap[i][j] > 0:
+            dcfurs.set_pix_rgb(i, j, self.heatcolors[self.heatmap[i][j]])
     self.update()
 
   def initGrid(self):
     self.grid = [[0 for col in range(self.columns)] for row in range(self.rows)]
+    self.heatmap = [[1 for col in range(self.columns)] for row in range(self.rows)]
     self.addGlider(1, 1)
     return self.grid
 

@@ -11,6 +11,11 @@ from animations.maze import maze
 from animations.dgol import dgol
 from animations.dogjump import dogjump
 from animations.northernlights import northernlights
+from animations.fireworks import fireworks
+from animations.hyperspace import hyperspace
+from animations.dcylon import dcylon
+from animations.throb import throb 
+from animations.strobe import strobe 
 
 ## Dynamically import all the python files we can find.
 import os
