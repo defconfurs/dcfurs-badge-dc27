@@ -1,9 +1,9 @@
 ![Badge Front](doc/front-render.png)
 
-DCFurs Badge Scripts
+DEFCON Furs Badge Scripts
 ====================
 
-The DC27 DEF CON Furs badge is running a Micropython environment that allows
+The 2019 DEFCON Furs badge (made for DC27) is running a Micropython environment that allows
 you to script the badge. You can write your own scriptable animations in Python,
 or upload them in JSON format.
 
