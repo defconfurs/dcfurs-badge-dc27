@@ -1,24 +1,3 @@
-## Load the python animations
-from animations.rainbow import rainbow
-from animations.scroll import scroll
-from animations.fur import fur
-from animations.worm import worm
-from animations.rain import rain
-from animations.cylon import cylon
-from animations.life import life
-from animations.pong import pong
-from animations.maze import maze
-from animations.dgol import dgol
-from animations.dogjump import dogjump
-from animations.northernlights import northernlights
-from animations.fireworks import fireworks
-from animations.hyperspace import hyperspace
-from animations.dcylon import dcylon
-from animations.throb import throb 
-from animations.strobe import strobe 
-from animations.sparkle import sparkle
-
-## Dynamically import all the python files we can find.
 import os
 import sys
 import ujson
@@ -127,13 +106,27 @@ class __jsonanim__:
         self.drawframe(self.js[self.framenum])
         self.framenum = (self.framenum + 1) % len(self.js)
 
-## Dynamically generate animation classes from JSON files.
+## Dynamically load/generate animation classes.
 files = os.listdir("/flash/animations")
 for filename in files:
-    if filename[:2] != "__" and filename[-5:] == ".json":
+    if filename[:2] == "__":
+        continue
+    
+    # Files ending in .json can be parsed into static animations.
+    if filename[-5:] == ".json":
+        print("Loading JSON animation from " + filename)
         classname = filename[:-5]
         globals()[classname] = type(classname, (__jsonanim__,), {'path': "/flash/animations/" + filename})
-
+    
+    # Files ending in .py should contain scripted animations.
+    if filename[-3:] == ".py":
+        classname = filename[:-3]
+        try:
+            print("Loading scripted animation from " + filename)
+            mod = __import__("animations." + classname, globals(), locals(), (classname))
+            globals()[classname] = getattr(mod, classname)
+        finally:
+            pass
 
 ## Return a list of all animation classes
 def all():

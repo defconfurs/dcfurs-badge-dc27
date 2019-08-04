@@ -41,15 +41,18 @@ while True:
             else:
                 selected = (selected + 1) % len(available)
                 anim = available[selected]()
+                print("Playing animation " + available[selected].__name__)
         elif badge.left.event():
             if badge.right.value():
                 emote.random()
             elif selected == 0:
                 selected = len(available)-1
                 anim = available[selected]()
+                print("Playing animation " + available[selected].__name__)
             else:
                 selected = selected - 1
                 anim = available[selected]()
+                print("Playing animation " + available[selected].__name__)
         # Service events.
         elif badge.boop.event():
             if hasattr(anim, 'boop'):
