@@ -1,3 +1,25 @@
+## Load the python animations
+from animations.rainbow import rainbow
+from animations.scroll import scroll
+from animations.fur import fur
+from animations.worm import worm
+from animations.rain import rain
+from animations.cylon import cylon
+from animations.life import life
+from animations.pong import pong
+from animations.maze import maze
+from animations.dgol import dgol
+from animations.dogjump import dogjump
+from animations.dj import dj
+from animations.northernlights import northernlights
+from animations.fireworks import fireworks
+from animations.hyperspace import hyperspace
+from animations.dcylon import dcylon
+from animations.throb import throb 
+from animations.strobe import strobe 
+from animations.sparkle import sparkle
+
+## Dynamically import all the python files we can find.
 import os
 import sys
 import ujson
