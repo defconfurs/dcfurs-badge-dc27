@@ -1,23 +1,30 @@
+![Badge Front](doc/front-render.png)
+
 DCFurs Badge Scripts
 ====================
 
-The DC27 DefCon Furs badge is running a micropython environment that allows
-you to script the badge to do awesome things.
+The DC27 DEF CON Furs badge is running a Micropython environment that allows
+you to script the badge. You can write your own scriptable animations in Python,
+or upload them in JSON format.
 
 ### Features Include
-* STM32L496RET6 microcontroller running Micropython
-* 32 Mbit SPI flash on SPI bus 3
-* 18x7 pixel RGB matrix display
-* Two pushbutton switches located on either side of the badge
-* Fanstel BT832A bluetooth radio connected to USART3
+* STM32L496RET6 microcontroller running Micropython.
+* 18x7 pixel RGB matrix display.
+* Powered by micro-USB or 2xAA batteries.
+* Micro-USB access to the Micropython REPL and filesystem.
+* 32 Mbit SPI flash on SPI bus 3.
+* Two pushbutton switches located on either side of the badge.
+* #4-40 threaded mounting holes for adding faces and bling.
 * I2C bus 3 for sensors and expansion.
-    - STMicro LIS2DE12 accelerometer at address 0x19
-    - #badgelife v1.69bis [Shitty Addon Standard](https://hackaday.com/2019/03/20/introducing-the-shitty-add-on-v1-69bis-standard/)
+    - STMicro LIS2DE12 accelerometer at address 0x19.
+    - Fanstel BT832A bluetooth module at address 0x42.
+    - Compliant with the #badgelife v1.69bis
+        [Shitty Addon Standard](https://hackaday.com/2019/03/20/introducing-the-shitty-add-on-v1-69bis-standard/).
 
 ### Further Reading
 * Source code, schematics and documentation are available on [GitHub](https://github.com/defconfurs/dcfurs-badge-dc27)
 * Micropython firmware sources can be found at https://github.com/defconfurs/micropython-dc27
-* A web-based tool for creating JSON animations at http://dcfurs.liquidthex.com/defcon/
+* A web-based tool for creating JSON animations at http://dcfurs.liquidthex.com/2019.php
 
 Badge Module
 ------------
@@ -52,18 +59,18 @@ DCFurs Module
 -------------
 The `dcfurs` module is impleneted within the Micropython firmware, and and includes
 the DMA and interrupt handlers necessary to drive the LED matrix. By writing this
-module in C, we can acheive a sufficiently fast scan rate to perform up to 64-steps
-of dimming control per color.
+module in C, we can acheive a sufficiently fast scan rate to perform approximately
+64-steps of dimming control per color.
 
 Pixels in the matrix are addressed by their row and column coordinates, starting from
 row zero and column zero in the upper left corner of the matrix.
 
 ### `dcfurs.init(timer)`
-Initialize the LED matrix and DMA interrupt handlers, this must be called first before
-any other features in the DCFurs module can be used. The `timer` parameter provides a
-handle to the STM32 Advanced-function timer `TIM8`, configured at the desired PWM
-frequency. This timer will be used to provide interrupts and DMA transfers in order
-to refresh the delay.
+Initialize the LED matrix and DMA interrupt handlers, this must be called anything can
+be written to the LED matrix. The `timer` parameter provides a handle to the STM32
+Advanced-function timer `TIM8`, configured at the desired PWM frequency. This timer
+will be used to schedule interrupts and DMA transfers in to refresh the delay. A PWM
+frequency of at least 250kHz is recommended.
 
 ```
     import dcfurs
@@ -85,8 +92,8 @@ or switch it off.
 
 ### `dcfurs.set_pix_rgb(row, col, value)`
 Sets the color of a single pixel using its row and column coordinates in the matrix.
-The `value` parameter must be an integer which encodes 8-bits of red, 8-bits of green
-and 8-bits of blue (eg: 0x00RRGGBB).
+The `value` parameter must be an integer which encodes a 24-bit color to use for the
+pixel, with 8-bits of red, 8-bits of green and 8-bits of blue (eg: `0xRRGGBB`).
 
 ### `dcfurs.set_pix_hue(row, col, hue, val=255)`
 Sets the color of a single pixel using its row and column coordinates in the matrix.
@@ -95,10 +102,11 @@ The color is specified in HSV color space, with `hue` being an angle between 0 a
 range of 0-255. The saturation component of the HSV color space is assumed to be 1.0
 for full saturation.
 
-### `dcfurs.set_row(row, pixels)`
+### `dcfurs.set_row(row, pixels, color=0xffffff)`
 Set the pixels for an entire row using a bitmap of pixel on/off values. The `pixels` 
 parameter can contain an integer, which will act as a bitmask of the pixels for this
-row, or an `bytearray` of PWM intensities.
+row, or an `bytearray` of PWM intensities. The third argument, `color` is optional
+and may specify the 24-bit color to use for the row.
 
 ### `dcfurs.set_frame(fbuf)`
 Sets the entire frame buffer in a single call. The `fbuf` parameter should be an array exactly
@@ -131,8 +139,7 @@ This constant integer defines the number of columns in the LED matrix. This is w
 have a value of 18.
 
 ### `dcfurs.boop`
-This class accesses the hardware capacative touch controller built into the STM32L4
-microcontroller. 
+This class accesses the capacative touch controller built into the STM32L4 microcontroller.
 
 Badge Animations
 ================
@@ -175,13 +182,6 @@ simple row-scanning example as follows:
             dcfurs.set_row(self.counter % dcfurs.nrows, 0x3ffff)
 ```
 
-To add your animation to the default set provided by the badge, you must add an `import`
-statement to `animations/__init__.py`
-
-```
-    from animations.example import example
-```
-
 From a REPL console, you can now run your animation with a simple python loop.
 
 ```
@@ -215,7 +215,7 @@ contains a hexadecimal string representation of the frame. Each nibble of the
 string sets the brighness for a single pixel with a value of `0` turning the pixel
 off and `F` setting the pixel to full intensity.
 
-Frame objects which encode color shall include an `rgb8` member that contains a
+Frame objects which encode color shall include an `rgb` member that contains a
 hexadecimal string representation of the frame. Each pair of nibbles of the string
 sets the color for a single pixel in 8-bit color.
 
@@ -265,21 +265,39 @@ the boot mode. To select a boot mode, wait until the desired color is active
 and then release `SW2`. The badge will flash your selected mode and then proceed
 to boot.
 
-* Green selects normal boot mode, which mounts the filesystem and executes `boot.py` and `main.py`
-* Blue selects safe mode, which mounts the filesystem but does not execute `boot.py` or `main.py`
-* Cyan performs a factory recovery, which formats the filesystem and restores the default contents.
+| LED Color | Mode          | Description
+|-----------|---------------|-------------------
+| Green     | Normal        | Mounts the filesystem, then execute `boot.py` and `main.py`.
+| Blue      | Safe Mode     | Mounts the filesystem, and stops at a REPL prompt for user input.
+| Cyan      | Recovery Mode | Format and restore the filesystem, then execute `boot.py` and `main.py`.
 
 Updating Firmware
 -----------------
-The STM32FL496 microcontroller features a DFU bootloader, which is capable of
-updating its firmware via USB. From a Linux or OSX machine, you will need the
-`firmware.dfu` image, as well as the `dfu-util` program. To apply a firwmare
-update, perform the following steps.
+The STM32L496 microcontroller features a USB DFU bootloader, which is capable
+of updating the badge firmware from a PC over USB. To perform this upgrade, you
+will need the `firmware.dfu` image, as well as DFU programming software such as
+the [dfu-util](http://dfu-util.sourceforge.net/) program for Linux or OSX, or
+[DfuSe](https://www.st.com/en/development-tools/stsw-stm32080.html) for Windows.
 
+### Linux and Mac OSX
 1. Completely power down the badge by removing the batteries and USB power.
 2. Power on badge via USB while holding down switch `SW1`, located adjacent
-    to the power swtich.
+    to the power swtich. The badge should enumerate with the PC as an
+    `STMicroelectronics STM Device in DFU Mode`
 3. Execute the command `dfu-util -a 0 -d 0483:df11 -D firmware.dfu`. Note that
     this may require `sudo` depending on your operating system and USB permissions.
 4. Wait for the upgrade to complete, which may take up to 30 seconds.
-5. Unplug the badge from USB to restart and apply the firmware update.
+5. Unplug the badge from USB and restart the badge to boot into the new firmware.
+
+### Windows
+1. Completely power down the badge by removing the batteries and USB power.
+2. Power on badge via USB while holding down switch `SW1`, located adjacent
+    to the power swtich.
+3. Run the `DfuSe demonstration` application from STMicroelectronics.
+4. Click the `Choose` button to select a DFU file.
+5. Check the `Optimize upgrade duration` checkbox to ignore FF blocks during the upload.
+6. Check the `Verify after download` checkbox if you want to launch the verification process
+    after downloading the firmware image to the badge.
+7. Click the `Upgrade` button to start upgrading file content to the memory.
+8. Click the `Verify` button to verify if the data was successfully downloaded.
+9. Unplug the badge from USB and restart the badge to boot into the new firmware.

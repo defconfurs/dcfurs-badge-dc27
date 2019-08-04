@@ -21,10 +21,6 @@ class bluetooth:
     REG_TXMAGIC     = const(0x2f)
     REG_TXDATA      = const(0x30)
 
-    # Undocumented text dump - read only and just full of random text.
-    # To be removed from the source code before release.
-    REG_TEXT        = const(0x40)
-
     # Supported Flags
     FLAG_EMOTE      = const(0x01)
     FLAG_COLOR      = const(0x02)
