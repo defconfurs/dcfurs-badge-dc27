@@ -10,6 +10,7 @@ from animations.pong import pong
 from animations.maze import maze
 from animations.dgol import dgol
 from animations.dogjump import dogjump
+from animations.dj import dj
 from animations.northernlights import northernlights
 from animations.fireworks import fireworks
 from animations.hyperspace import hyperspace
