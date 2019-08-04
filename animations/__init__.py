@@ -128,13 +128,27 @@ class __jsonanim__:
         self.drawframe(self.js[self.framenum])
         self.framenum = (self.framenum + 1) % len(self.js)
 
-## Dynamically generate animation classes from JSON files.
+## Dynamically load/generate animation classes.
 files = os.listdir("/flash/animations")
 for filename in files:
-    if filename[:2] != "__" and filename[-5:] == ".json":
+    if filename[:2] == "__":
+        continue
+    
+    # Files ending in .json can be parsed into static animations.
+    if filename[-5:] == ".json":
+        print("Loading JSON animation from " + filename)
         classname = filename[:-5]
         globals()[classname] = type(classname, (__jsonanim__,), {'path': "/flash/animations/" + filename})
-
+    
+    # Files ending in .py should contain scripted animations.
+    if filename[-3:] == ".py":
+        classname = filename[:-3]
+        try:
+            print("Loading scripted animation from " + filename)
+            mod = __import__("animations." + classname, globals(), locals(), (classname))
+            globals()[classname] = getattr(mod, classname)
+        finally:
+            pass
 
 ## Return a list of all animation classes
 def all():
