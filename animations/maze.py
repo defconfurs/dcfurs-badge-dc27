@@ -26,6 +26,11 @@ def dirxy(direction, magnitude=1):
     return (0,0)
 
 class maze:
+    # Chosen pixel colors
+    PX_WALL = const(0x01)
+    PX_PLAYER = const(0xff)
+    PX_FINISH = const(0x18)
+
     def __init__(self, width=51, height=51):
         self.blink = True
         self.interval = 200
@@ -111,11 +116,11 @@ class maze:
                 if (zx < 0) or (zx >= self.width):
                     dcfurs.set_pixel(x, y, 0)
                 elif row[zx] == MAZE_WALL:
-                    dcfurs.set_pixel(x, y, 1)
+                    dcfurs.set_pixel(x, y, self.PX_WALL)
                 elif row[zx] == MAZE_FINISH:
-                    dcfurs.set_pixel(x, y, 0xff if self.blink else 0)
+                    dcfurs.set_pixel(x, y, self.PX_FINISH if self.blink else 0)
                 elif (zx == self.x) and (zy == self.y):
-                    dcfurs.set_pixel(x, y, 0xff)
+                    dcfurs.set_pixel(x, y, self.PX_PLAYER)
                 else:
                     dcfurs.set_pixel(x, y, 0)
 
