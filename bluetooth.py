@@ -1,4 +1,6 @@
 from pyb import I2C
+import badge
+import random
 
 class bluetooth:
     I2C_ADDR = const(0x42)
@@ -24,6 +26,13 @@ class bluetooth:
     # Supported Flags
     FLAG_EMOTE      = const(0x01)
     FLAG_COLOR      = const(0x02)
+    FLAG_AWOO       = const(0x04)
+
+    # Color Encoding
+    COLOR_RANDOM    = const(0x7f)
+    COLOR_WHITE     = const(0x7e)
+    COLOR_HUE_MAX   = const(120)
+    COLOR_HUE_STEPS = 3
 
     def __init__(self, bus, addr=I2C_ADDR):
         self.addr = addr
@@ -55,11 +64,17 @@ class bluetooth:
         return self.read(self.REG_FLAGS)
 
     def color(self):
-        result = self.bus.mem_read(3, self.addr, self.REG_FLAGS)
-        flags = result[0]
-        rgb16 = result[1] + (result[2] << 8)
-        if result[0] & self.FLAG_COLOR:
-            # Convert to rgb-888 because after two badges, I'm still undecided on color encoding.
-            return ((rgb16 & 0xf800) << 8) | ((rgb16 & 0x07e0) << 5) | ((rgb16 & 0x001F) << 3)
-        else:
+        reg = self.read(self.REG_COLOR)
+        if (reg == self.COLOR_WHITE):
+            return 0xffffff
+        if (reg == self.COLOR_RANDOM):
+            reg = random.randint(0, 120)
+        return badge.hue2rgb(reg * self.COLOR_HUE_STEPS)
+    
+    def hue(self):
+        reg = self.read(self.REG_COLOR)
+        if (reg == self.COLOR_WHITE):
             return None
+        if (reg == self.COLOR_RANDOM):
+            return random.randint(0, 360)
+        return reg

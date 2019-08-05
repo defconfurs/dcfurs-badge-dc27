@@ -34,19 +34,6 @@ try:
 except Exception as e:
     ble = None
 
-def color():
-    if not ble:
-        return settings.color
-    
-    try:
-    	suggested = ble.color()
-    	if (suggested):
-        	return suggested
-    	else:
-        	return settings.color
-    except Exception as e:
-        return settings.color
-
 ##-----------------------------------------------
 ## Pushbutton Class
 ##-----------------------------------------------
@@ -108,7 +95,7 @@ def trysuspend():
     return False
 
 ##-----------------------------------------------
-## Hue/Value to RGB565 conversion
+## Hue/Value to RGB888 conversion
 ##-----------------------------------------------
 def hue2rgb(hue, val=255):
     sextant = hue // 60

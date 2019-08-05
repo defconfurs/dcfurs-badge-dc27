@@ -77,8 +77,7 @@ font7bit = {
     '~':bytearray([0x08,0x04,0x08,0x04]),
 }
 
-def owo():
-    color = badge.color()
+def owo(color=0xffffff):
     dcfurs.set_row(0, 0x1c00e, color)
     dcfurs.set_row(1, 0x22011, color)
     dcfurs.set_row(2, 0x22851, color)
@@ -87,8 +86,7 @@ def owo():
     dcfurs.set_row(5, 0x22011, color)
     dcfurs.set_row(6, 0x1c00e, color)
 
-def boop():
-    color = badge.color()
+def boop(color=0xffffff):
     dcfurs.set_row(0, 0x0e48e, color)
     dcfurs.set_row(1, 0x12b52, color)
     dcfurs.set_row(2, 0x12b52, color)
@@ -97,8 +95,7 @@ def boop():
     dcfurs.set_row(5, 0x02012, color)
     dcfurs.set_row(6, 0x0200e, color)
 
-def beep():
-    color = badge.color()
+def beep(color=0xffffff):
     dcfurs.set_row(0, 0x0e00e, color)
     dcfurs.set_row(1, 0x12492, color)
     dcfurs.set_row(2, 0x12b52, color)
@@ -107,8 +104,7 @@ def beep():
     dcfurs.set_row(5, 0x02012, color)
     dcfurs.set_row(6, 0x0200e, color)
 
-def awoo():
-    color = badge.color()
+def awoo(color=0xffffff):
     dcfurs.set_row(0, 0x00006, color)
     dcfurs.set_row(1, 0x11229, color)
     dcfurs.set_row(2, 0x2aa29, color)
@@ -118,16 +114,16 @@ def awoo():
     dcfurs.set_row(6, 0x00000, color)
 
 ## Render an emote from an ascii string
-def render(str):
+def render(str, color=0xffffff):
     ## Check for special cases
     if str == 'boop':
-        boop()
+        boop(color)
         return
     if str == 'owo':
-        owo()
+        owo(color)
         return
     if str == 'awoo':
-        awoo()
+        awoo(color)
         return
 
     ## Otherwise, generate from our character set.
@@ -136,7 +132,6 @@ def render(str):
     dcfurs.clear()
 
     ## Draw the left character.
-    color = badge.color()
     column = int((8 - len(lbits))/2)
     for colbits in lbits:
         for y in range(0, dcfurs.nrows):
@@ -181,11 +176,11 @@ prebuilt = [
 ]
 
 ## Draw a random emote from prebuilt[]
-def random():
+def random(color=0xffffff):
     x = choice(prebuilt)
     if type(x) is str:
-        render(x)
+        render(x, color)
     elif callable(x):
-        x()
+        x(color)
     else:
-        dcfurs.set_frame(x)
+        dcfurs.set_frame(x, color)

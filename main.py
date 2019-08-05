@@ -26,8 +26,25 @@ def check_ble():
     
     flags = badge.ble.read(badge.ble.REG_FLAGS)
     if flags & badge.ble.FLAG_EMOTE:
-        emote.random()
+        ## Remote emote extravaganza!
+        value = badge.ble.read16(badge.ble.REG_EMOTE)
+        color = badge.ble.color()
+        if (value):
+            try:
+                emote.render(chr(value & 0xff) + chr(value >> 8), color)
+            except Exception:
+                emote.random(color)
+        else:
+            emote.random(color)
         pyb.delay(2500)
+    if flags & badge.ble.FLAG_AWOO:
+        ## Someone started a howl
+        msg = animations.scroll(" AWOOOOOOOOOOOOOOOO")
+        delay = 0
+        while delay < 5000:
+            msg.draw()
+            pyb.delay(msg.interval)
+            delay += msg.interval
 
 anim = available[selected]()
 while True:

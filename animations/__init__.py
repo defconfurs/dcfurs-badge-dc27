@@ -63,6 +63,7 @@ class __jsonanim__:
             print("Caught a MemoryError while trying to load {}".format(self.path))
             self.js = [{"interval":"750","frame":"0ff0000f000f000000:f00f0f0f0000f00000:f0000000f0000f0000:f0000000f000f00000:f00f0f000f0f000000:0ff00000000000ffff:000000000000000000"},{"interval":"750","frame":"0ff0000f000f000000:f00f0f0f0000f00000:f0000000f0000f0000:f0000000f000f00000:f00f0f000f0f000000:0ff000000000000000:000000000000000000"}]
 
+        self.color = badge.hue2rgb(int(rand() * 360))
         self.draw()
 
     def drawframe(self, frame):
@@ -74,10 +75,9 @@ class __jsonanim__:
         if 'frame' in frame:
             # Generate the animation color mapping.
             colormap = [0]*16
-            color = badge.color()
-            c_red   = (color & 0xff0000) >> 16
-            c_green = (color & 0x00ff00) >> 8
-            c_blue  = (color & 0x0000ff) >> 0
+            c_red   = (self.color & 0xff0000) >> 16
+            c_green = (self.color & 0x00ff00) >> 8
+            c_blue  = (self.color & 0x0000ff) >> 0
             for i in range(0,16):
                 p_red   = c_red * self.intensity[i] >> 8
                 p_green = c_green * self.intensity[i] >> 8
