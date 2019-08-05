@@ -19,6 +19,7 @@ class bluetooth:
 
     # Writeable Addresses
     REG_ADVNAME     = const(0x1c)
+    REG_COOLDOWN    = const(0x2c)
     REG_TXLEN       = const(0x2e)
     REG_TXMAGIC     = const(0x2f)
     REG_TXDATA      = const(0x30)

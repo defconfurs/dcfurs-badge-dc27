@@ -31,6 +31,7 @@ ble = None
 try:
     if (bus.mem_read(8, 0x42, 0)):
         ble = bluetooth(bus)
+        ble.write(ble.REG_COOLDOWN, settings.cooldown)
 except Exception as e:
     ble = None
 
@@ -57,7 +58,7 @@ left = switch(Pin('SW2', Pin.IN))
 ##-----------------------------------------------
 ## Capacative Touch Controller
 ##-----------------------------------------------
-boop = dcfurs.boop()
+boop = dcfurs.boop(settings.boopselect)
 tmr = Timer(2, freq=100)
 tmr.callback(lambda t: boop.start())
 

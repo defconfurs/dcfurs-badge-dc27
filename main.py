@@ -37,6 +37,7 @@ def check_ble():
         else:
             emote.random(color)
         pyb.delay(2500)
+
     if flags & badge.ble.FLAG_AWOO:
         ## Someone started a howl
         msg = animations.scroll(" AWOOOOOOOOOOOOOOOO")
@@ -46,22 +47,48 @@ def check_ble():
             pyb.delay(msg.interval)
             delay += msg.interval
 
+# Toggle the boop function and display the results.
+def booptoggle():
+    # Draw the text 'BP and part of an arrow'
+    dcfurs.clear()
+    dcfurs.set_row(0, 0x02066)
+    dcfurs.set_row(1, 0x020aa)
+    dcfurs.set_row(2, 0x02066)
+    dcfurs.set_row(3, 0x0202a)
+    dcfurs.set_row(4, 0x02026)
+
+    # Toggle the boop selection.
+    if settings.boopselect:
+        settings.boopselect = 0
+        badge.boop = dcfurs.boop(settings.boopselect)
+        dcfurs.set_pixel(12, 1, 0xff)
+        dcfurs.set_pixel(14, 1, 0xff)
+        dcfurs.set_pixel(11, 2, 0xff)
+        dcfurs.set_pixel(15, 2, 0xff)
+    else:
+        settings.boopselect = 1
+        badge.boop = dcfurs.boop(settings.boopselect)
+        dcfurs.set_pixel(12, 3, 0xff)
+        dcfurs.set_pixel(14, 3, 0xff)
+        dcfurs.set_pixel(11, 2, 0xff)
+        dcfurs.set_pixel(15, 2, 0xff)
+
 anim = available[selected]()
 while True:
     anim.draw()
     ival = anim.interval
     while ival > 0:
-        ## Change animation on button press, or emote if both pressed.
+        ## Change animation on button press, or toggle the booper if both pressed.
         if badge.right.event():
             if badge.left.value():
-                emote.random()
+                booptoggle()
             else:
                 selected = (selected + 1) % len(available)
                 anim = available[selected]()
                 print("Playing animation " + available[selected].__name__)
         elif badge.left.event():
             if badge.right.value():
-                emote.random()
+                booptoggle()
             elif selected == 0:
                 selected = len(available)-1
                 anim = available[selected]()
@@ -70,6 +97,9 @@ while True:
                 selected = selected - 1
                 anim = available[selected]()
                 print("Playing animation " + available[selected].__name__)
+        ## Pause for as long as long as both buttons are pressed.
+        elif badge.right.value() and badge.left.value():
+            ival += 50
         # Service events.
         elif badge.boop.event():
             if hasattr(anim, 'boop'):
@@ -81,10 +111,6 @@ while True:
                 ival = 1000
         elif badge.ble:
             check_ble()
-
-        ## Pause for as long as long as both buttons are pressed.
-        if badge.right.value() and badge.left.value():
-            ival += 50
 
         ## Run the animation timing
         if ival > 50:
