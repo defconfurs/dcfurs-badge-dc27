@@ -108,9 +108,26 @@ class __jsonanim__:
         self.drawframe(self.js[self.framenum])
         self.framenum = (self.framenum + 1) % len(self.js)
 
+# Clear the display while loading.
+dcfurs.clear()
+def __loading__(step, total):
+    x = dcfurs.ncols + dcfurs.nrows - 1
+    shift = x - (step * x) // total
+    dcfurs.set_row(0, 0x03fffff >> shift, 0xff0000) # Red
+    dcfurs.set_row(1, 0x07fffff >> shift, 0xff8000) # Orange
+    dcfurs.set_row(2, 0x0ffffff >> shift, 0xffff00) # Yellow
+    dcfurs.set_row(3, 0x1ffffff >> shift, 0x00ff00) # Green
+    dcfurs.set_row(4, 0x3ffffff >> shift, 0x00ffff) # Cyan
+    dcfurs.set_row(5, 0x7ffffff >> shift, 0x0000ff) # Blue
+    dcfurs.set_row(6, 0xfffffff >> shift, 0xff00ff) # Purple
+
 ## Dynamically load/generate animation classes.
 files = os.listdir("/flash/animations")
+step = 0
 for filename in files:
+    __loading__(step, len(files))
+    step = step + 1
+
     if filename[:2] == "__":
         continue
     
