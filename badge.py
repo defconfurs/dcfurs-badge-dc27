@@ -31,7 +31,7 @@ ble = None
 try:
     if (bus.mem_read(8, 0x42, 0)):
         ble = bluetooth(bus)
-        ble.write(ble.REG_COOLDOWN, settings.cooldown)
+        ble.write(ble.REG_COOLDOWN, settings.blecooldown)
 except Exception as e:
     ble = None
 
