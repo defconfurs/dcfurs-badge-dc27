@@ -40,26 +40,41 @@ class bluetooth:
         self.bus = bus
 
     def read(self, reg):
-        result = self.bus.mem_read(1, self.addr, reg)
-        return result[0]
+        try:
+            result = self.bus.mem_read(1, self.addr, reg)
+            return result[0]
+        except Exception:
+            return 0
     
     def read16(self, reg):
-        result = self.bus.mem_read(2, self.addr, reg)
-        return result[0] + (result[1] << 8)
+        try:
+            result = self.bus.mem_read(2, self.addr, reg)
+            return result[0] + (result[1] << 8)
+        except Exception:
+            return 0
     
     def write(self, reg, value):
-        self.bus.mem_write(bytearray([value]), self.addr, reg)
+        try:
+            self.bus.mem_write(bytearray([value]), self.addr, reg)
+        except Exception:
+            pass
 
     def write16(self, reg, value):
-        buf = bytearray([(value & 0x00ff) >> 0, (value & 0xff00) >> 8])
-        self.bus.mem_write(buf, self.addr, reg)
+        try:
+            buf = bytearray([(value & 0x00ff) >> 0, (value & 0xff00) >> 8])
+            self.bus.mem_write(buf, self.addr, reg)
+        except Exception:
+            pass
     
     def transmit(self, magic, payload=None):
         buf = bytearray([0, magic])
         if payload:
             buf[0] = len(payload)
             buf += payload
-        self.bus.mem_write(buf, self.addr, self.REG_TXLEN)
+        try:
+            self.bus.mem_write(buf, self.addr, self.REG_TXLEN)
+        except Exception:
+            pass
     
     def flags(self):
         return self.read(self.REG_FLAGS)
