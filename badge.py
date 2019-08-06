@@ -11,7 +11,7 @@ from lis2de12 import lis2de12
 from bluetooth import bluetooth
 
 # The I2C bus used for all the off-chip stuff.
-bus = I2C(3, I2C.MASTER, baudrate=100000)
+bus = I2C(3, I2C.MASTER, baudrate=400000)
 
 ##-----------------------------------------------
 ## LED Matrix Drivers
