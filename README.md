@@ -24,6 +24,7 @@ or upload them in JSON format.
 ### Further Reading
 * Source code, schematics and documentation are available on [GitHub](https://github.com/defconfurs/dcfurs-badge-dc27)
 * Micropython firmware sources can be found at https://github.com/defconfurs/micropython-dc27
+* Assembly instructions and mechanical details can be found in the [Assembly Guide](doc/ASSEMBLY.md)
 * A web-based tool for creating JSON animations at http://dcfurs.liquidthex.com/2019.php
 
 Badge Module
