@@ -62,7 +62,7 @@ the DMA and interrupt handlers necessary to drive the LED matrix. By writing thi
 module in C, we can acheive a sufficiently fast scan rate to perform approximately
 64-steps of dimming control per color.
 
-Pixels in the matrix are addressed by their row and column coordinates, starting from
+Pixels in the matrix are addressed by their column and row coordinates, starting from
 row zero and column zero in the upper left corner of the matrix.
 
 ### `dcfurs.init(timer)`
@@ -83,20 +83,20 @@ frequency of at least 250kHz is recommended.
 ### `dcfurs.clear()`
 Clear the LED matrix, setting all pixels to an off state.
 
-### `dcfurs.set_pixel(row, col, value=True)`
-Sets the color of a single pixel using its row and column coordinates in the matrix.
+### `dcfurs.set_pixel(col, row, value=True)`
+Sets the color of a single pixel using its column and row coordinates in the matrix.
 The `value` parameter can provide the pixel's color using 8-bit color. If `value` is
 an integer, it encodes 3-bits of red, 3-bits of green and 2-bits of blue into a single
 byte. Otherwise the truth value will either set the pixel to white at full intensity,
 or switch it off.
 
-### `dcfurs.set_pix_rgb(row, col, value)`
-Sets the color of a single pixel using its row and column coordinates in the matrix.
+### `dcfurs.set_pix_rgb(col, row, value)`
+Sets the color of a single pixel using its column and row coordinates in the matrix.
 The `value` parameter must be an integer which encodes a 24-bit color to use for the
 pixel, with 8-bits of red, 8-bits of green and 8-bits of blue (eg: `0xRRGGBB`).
 
-### `dcfurs.set_pix_hue(row, col, hue, val=255)`
-Sets the color of a single pixel using its row and column coordinates in the matrix.
+### `dcfurs.set_pix_hue(col, row, hue, val=255)`
+Sets the color of a single pixel using its column and row coordinates in the matrix.
 The color is specified in HSV color space, with `hue` being an angle between 0 and
 360 degrees. The `val` parameter is optional and specifies the intensity value in the
 range of 0-255. The saturation component of the HSV color space is assumed to be 1.0
@@ -124,8 +124,8 @@ This function can be implemented as a slightly more efficient version of:
             i += 1
 ```
 
-### `dcfurs.has_pixel(row, col)`
-Checks if the pixel at the given row and colum exists in the LED matrix. Due to the shape
+### `dcfurs.has_pixel(col, row)`
+Checks if the pixel at the given column and row exists in the LED matrix. Due to the shape
 of the badge, some of the pixels at the corners of the matrix and over the bridge of the
 nose are missing from the display. This function will return `True` if the pixel exists
 and `False` otherwise.
