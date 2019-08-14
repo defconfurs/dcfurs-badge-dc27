@@ -11,7 +11,7 @@ print("Booting...")
 import animations
 
 ## Select the user's preferred boot animation.
-available = animations.all()
+available = sorted(animations.all(), key=lambda animation: animation.__name__)
 selected = 0
 if settings.bootanim:
     try:
